@@ -2,18 +2,17 @@
 dependencies: []
 
 galaxy_info:
-  author: deepakdalavi
+  author: UniCode
   description: MySQL server for RHEL/CentOS and Debian/Ubuntu.
-  company: "CloudCover Pvt Ltd"
+  company: "CloudCover Pvt Ltd, Pune"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.2
   platforms:
     - name: Ubuntu
       versions:
       - all
-    - name: Debian
-      versions:
-      - all
       
   galaxy_tags:
     - database
+    - arangodb
+    - arangodb cluster
