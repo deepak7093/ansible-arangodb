@@ -1,0 +1,30 @@
+---
+
+- name: Update apt repository
+  apt: 
+    update_cache: yes
+
+- name: Add repository keys
+  apt_key: 
+    url: https://download.arangodb.com/arangodb33/xUbuntu_{{ ansible_distribution_version }}/Release.key
+    state: present
+
+- name: Add apt-repo for arangodb
+  apt_repository:
+    repo: 'deb https://download.arangodb.com/arangodb33/xUbuntu_{{ ansible_distribution_version }}/ /'
+    state: present
+    filename: arangodb
+    update_cache: yes
+
+- name: fix for dependancy packages 
+  shell: cd /tmp; rm -rf libssl1.0.0_1.0.2g-1ubuntu4_amd64.deb*; wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4_amd64.deb; yes | dpkg -i /tmp/libssl1.0.0_1.0.2g-1ubuntu4_amd64.deb
+
+- name: Update apt repository
+  apt: 
+    update_cache: yes
+
+- name: Install arangodb
+  apt:
+    name: arangodb3=3.3.13
+    state: present
+  notify: arangodb3-restart

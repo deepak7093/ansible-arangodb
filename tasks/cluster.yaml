@@ -1,0 +1,39 @@
+# Setup the cluster
+
+- name: install coordinator configuration
+  template: src=coordinator.conf.j2 dest=/etc/arangodb3/arangod.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('coordinator' in group_names )
+
+- name: install primary configuration
+  template: src=primary.conf.j2 dest=/etc/arangodb3/arangod.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('primary' in group_names )
+
+- name: install secondary configuration
+  template: src=secondary.conf.j2 dest=/etc/arangodb3/arangod.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('secondary' in group_names )
+
+
+- name: install coordinator arangosh configuration
+  template: src=coordinator-arangosh.conf.j2 dest=/etc/arangodb3/arangosh.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('coordinator' in group_names )
+
+- name: install primary arangosh configuration
+  template: src=primary-arangosh.conf.j2 dest=/etc/arangodb3/arangosh.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('primary' in group_names )
+
+- name: install secondary configuration
+  template: src=secondary-arangosh.conf.j2 dest=/etc/arangodb3/arangosh.conf owner=root group=root mode=0644
+  notify: arangodb3-restart
+  when: ('secondary' in group_names )
+
+- name: Restart arangodb3 service
+  service: name=arangodb3 state=restarted
+
+# - name: Add members to cluster
+#   command: arangodb --starter.data-dir=/var/lib/"{{ ansible_hostname }}" --starter.join "{{ item }}"
+#   when: ('secondary' in group_names )

@@ -1,0 +1,19 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: deepakdalavi
+  description: MySQL server for RHEL/CentOS and Debian/Ubuntu.
+  company: "CloudCover Pvt Ltd"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.2
+  platforms:
+    - name: Ubuntu
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+      
+  galaxy_tags:
+    - database

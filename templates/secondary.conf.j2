@@ -1,0 +1,114 @@
+# ArangoDB configuration file
+#
+# Documentation:
+# https://docs.arangodb.com/latest/Manual/Administration/Configuration/
+#
+
+[database]
+directory = /var/lib/arangodb3
+
+# maximal-journal-size = 33554432
+
+[server]
+# Specify the endpoint for HTTP requests by clients.
+#  tcp://ipv4-address:port
+#  tcp://[ipv6-address]:port
+#  ssl://ipv4-address:port
+#  ssl://[ipv6-address]:port
+#  unix:///path/to/socket
+#
+# Examples:
+#   endpoint = tcp://0.0.0.0:8530
+#   endpoint = tcp://127.0.0.1:8530
+#   endpoint = tcp://localhost:8530
+#   endpoint = tcp://myserver.arangodb.com:8530
+#   endpoint = tcp://[::]:8530
+#   endpoint = tcp://[fe80::21a:5df1:aede:98cf]:8530
+
+authentication = true                        
+# enable or disable authentication for ALL client requests (default: true)
+
+authentication-system-only = true            
+ # 3 use HTTP authentication only for requests to /_api and /_admin (default: true)
+
+authentication-timeout = 0                    
+# timeout for the authentication cache in seconds (0 = indefinitely) (default: 0)
+
+authentication-unix-sockets = true   
+#authentication for requests via UNIX domain sockets (default: true)
+
+descriptors-minimum = 0                     
+#  minimum number of file descriptors needed to start (default: 0)
+
+endpoint = http+tcp://{% for host in groups['secondary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8530                   
+  #  endpoint for client requests (e.g. 'http+tcp://127.0.0.1:8530', or 
+  #'vst+ssl://192.168.1.1:8530') (default: )
+
+jwt-secret = admin                          
+# secret to use when doing jwt authentication (default: "")
+
+local-authentication = true
+#  enable or disable authentication using the local user database (default: true)
+
+maximal-queue-size = 0
+# maximum queue length for pending operations (use 0 for unrestricted) (default: 0)
+
+session-timeout = 5184000
+#  timeout of web interface server sessions (in seconds) (default: 5184000)
+
+storage-engine = auto
+# storage engine type. possible values: "auto", "mmfiles", "rocksdb" (default: "auto") threads = 0
+# number of threads (default: 0)
+
+# reuse a port on restart or wait until it is freed by the operating system
+
+# number of server threads. use 0 to make arangod determine the
+# number of threads automatically, based on available CPUs
+# threads = 0
+
+# gather server statistics
+statistics = true
+
+# the user and group are normally set in the start script
+# uid = arangodb
+# gid = arangodb
+
+uid = arangodb
+
+
+[javascript]
+startup-directory = /usr/share/arangodb3/js
+app-path = /var/lib/arangodb3-apps
+# app-path = //arangodb3/apps
+
+# number of V8 contexts available for JavaScript execution. use 0 to
+# make arangod determine the number of contexts automatically.
+# v8-contexts = 0
+
+[foxx]
+# enable Foxx queues in the server
+# queues = true
+
+# interval (seconds) to use for polling jobs in Foxx queues
+# queues-poll-interval = 1
+
+[log]
+level = info
+file = /var/log/arangodb3/arangod.log
+
+[agency]
+endpoint  =    tcp://{% for host in groups['coordinator'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8500
+endpoint  = 	  tcp://{% for host in groups['primary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8500
+endpoint  =    tcp://{% for host in groups['secondary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8500
+activate = true
+size = 3 
+pool-size = 3
+supervision = true
+my-address = tcp://{% for host in groups['secondary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8500
+
+[cluster]
+# Section 'cluster' (Configure the cluster)
+my-address = tcp://{% for host in groups['secondary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8530
+#my-role = PRIMARY
+synchronous-replication-timeout-factor  = 1
+system-replication-factor = 2

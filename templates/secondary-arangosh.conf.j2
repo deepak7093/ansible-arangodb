@@ -1,0 +1,14 @@
+[console]
+pretty-print = true
+
+[server]
+endpoint = tcp://{% for host in groups['secondary'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}:8530
+authentication = true
+#username = root
+#password = password
+
+[log]
+file = -
+
+[javascript]
+startup-directory = /usr/share/arangodb3/js
