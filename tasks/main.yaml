@@ -1,8 +1,6 @@
 ---
 
-# - include: ubuntu.yaml
-#   when: ansible_distribution == "Ubuntu"
+- include: ubuntu.yaml
+  when: ansible_distribution == "Ubuntu"
 
 - include: cluster.yaml
-
-
