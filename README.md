@@ -44,11 +44,11 @@ None.
 
 ## Example Playbook
 
-- hosts: all
-  become: True
-  gather_facts: True
-  roles:
-    - arangodb
+    - hosts: all
+      become: True
+      gather_facts: True
+      roles:
+        - arangodb
 
 ## Example inventory
     
